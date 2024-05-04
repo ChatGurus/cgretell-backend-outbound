@@ -8,11 +8,11 @@ import { Retell } from "retell-sdk";
 import { RegisterCallResponse } from "retell-sdk/resources/call";
 import { CustomLlmRequest, CustomLlmResponse } from "./types";
 // Any one of these following LLM clients can be used to generate responses.
-import { FunctionCallingLlmClient } from "./llms/llm_openai_func_call";
+// import { FunctionCallingLlmClient } from "./llms/llm_openai_func_call";
 // import { DemoLlmClient } from "./llms/llm_azure_openai";
 // import { FunctionCallingLlmClient } from "./llms/llm_azure_openai_func_call_end_call";
 // import { FunctionCallingLlmClient } from "./llms/llm_azure_openai_func_call";
-// import { DemoLlmClient } from "./llms/llm_openrouter";
+import { DemoLlmClient } from "./llms/llm_openrouter";
 
 export class Server {
   private httpServer: HTTPServer;
@@ -35,6 +35,7 @@ export class Server {
 
     this.handleRetellLlmWebSocket();
     this.handleRegisterCallAPI();
+    this.handleCreatePhoneCall(); // added for outbound voicecall
     this.handleWebhook();
 
     // If you want to create an outbound call with your number
@@ -112,6 +113,20 @@ export class Server {
     );
   }
 
+  // this has been added by SmartMart as a simple outbound procedure
+  handleCreatePhoneCall() {
+    this.app.post("/create-phone-call", async (req: Request, res: Response) => {
+      const { fromNumber, toNumber, agentId } = req.body;
+      try {
+        await this.twilioClient.CreatePhoneCall(fromNumber, toNumber, agentId);
+        res.status(200).json({ message: "Voice call successfully initiated" });
+      } catch (error) {
+        console.error("Error initiating voice call:", error);
+        res.status(500).json({ error: "Failed to initiate voice call" });
+      }
+    });
+  }
+
   /* Start a websocket server to exchange text input and output with Retell server. Retell server 
      will send over transcriptions and other information. This server here will be responsible for
      generating responses with LLM and send back to Retell server.*/
@@ -134,7 +149,7 @@ export class Server {
           ws.send(JSON.stringify(config));
 
           // Start sending the begin message to signal the client is ready.
-          const llmClient = new FunctionCallingLlmClient();
+          const llmClient = new DemoLlmClient();
 
           ws.on("error", (err) => {
             console.error("Error received in LLM websocket client: ", err);
