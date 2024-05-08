@@ -12,7 +12,7 @@ import { CustomLlmRequest, CustomLlmResponse } from "./types";
 // import { DemoLlmClient } from "./llms/llm_azure_openai";
 // import { FunctionCallingLlmClient } from "./llms/llm_azure_openai_func_call_end_call";
 // import { FunctionCallingLlmClient } from "./llms/llm_azure_openai_func_call";
-import { DemoLlmClient } from "./llms/llm_openrouter";
+import { DemoLlmClient } from "./llms/llm_openai";
 
 export class Server {
   private httpServer: HTTPServer;
