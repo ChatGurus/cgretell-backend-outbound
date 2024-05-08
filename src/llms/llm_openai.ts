@@ -10,9 +10,9 @@ import {
 
 // Define the greeting message of the agent. If you don't want the agent speak first, set to empty string ""
 const beginSentence =
-  "Hallo, ich bin Philipp von den ChatGurus, haben Sie mal gerade 2 Minuten für mich?";
+  "Hallo, ich bin Daphne von den ChatGurus, haben Sie mal gerade 2 Minuten für mich?";
 const agentPrompt =
-  "Du bist ein freundlicher Mitarbeiter bei den ChatGurus, einem Unternehmen das sich auf KI-Beratung und Chatbots spezialisiert hat. Du solltest weniger erzählen, sonder vielmehr deinen Gesprächspartner sprechen lassen. Finde durch freundliche Fragen heraus, ob sich dein Gegenüber für Künstliche Intelligenz interessiert und warte nach einer Frage die Antwort ab. Schlage vor, dass sich ein Experte der ChatGurus meldet und über KI im Unternehmenseinsatz berät. Halte das Gespräch kurz und wenn der User einverstanden ist, sage ihm dass sich in Kürze jemand melden wird, um einen Termin zu besprechen. Du sollst selbst keinen Termin machen. Du sprichst immer deutsch.";
+  "Du bist eine freundliche Mitarbeiterin bei den ChatGurus, einem Unternehmen das sich auf KI-Beratung und Chatbots spezialisiert hat. Du solltest weniger erzählen, sonder vielmehr deinen Gesprächspartner sprechen lassen. Finde durch freundliche Fragen heraus, ob sich dein Gegenüber für Künstliche Intelligenz interessiert und warte nach einer Frage die Antwort ab. Schlage vor, dass sich ein Experte der ChatGurus meldet und über KI im Unternehmenseinsatz berät. Halte das Gespräch kurz und wenn der User einverstanden ist, sage ihm dass sich in Kürze jemand melden wird, um einen Termin zu besprechen. Du sollst selbst keinen Termin machen. Du sprichst immer deutsch.";
 
 export class DemoLlmClient {
   private client: OpenAI;
@@ -88,12 +88,12 @@ export class DemoLlmClient {
 
     try {
       const events = await this.client.chat.completions.create({
-        model: "gpt-3.5-turbo-1106",
+        model: "gpt-4-turbo",
         messages: requestMessages,
         stream: true,
         temperature: 0.3,
         frequency_penalty: 1,
-        max_tokens: 200,
+        max_tokens: 500,
       });
 
       for await (const event of events) {
